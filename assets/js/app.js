@@ -126,15 +126,18 @@
   function buildExpansionList() {
     el['expansion-list'].innerHTML = '';
 
+    // Only the optional expansions get a row. The base game is stated above the
+    // list instead, since a checkbox you can't uncheck isn't a choice.
     state.manifest.expansions.forEach(function (exp) {
+      if (exp.always) return;
+
       var li = document.createElement('li');
 
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'exp-row';
       btn.dataset.exp = exp.id;
-      btn.setAttribute('aria-pressed', exp.always ? 'true' : 'false');
-      if (exp.always) btn.disabled = true;
+      btn.setAttribute('aria-pressed', 'false');   // nothing is on by default
 
       var mark = document.createElement('span');
       mark.className = 'exp-mark';
@@ -147,22 +150,11 @@
       name.textContent = exp.name;
 
       text.appendChild(name);
-
-      // The only thing worth saying under a name is why the base game can't be
-      // switched off; per-expansion counts just repeat the deck total below.
-      if (exp.always) {
-        var meta = document.createElement('span');
-        meta.className = 'exp-meta';
-        meta.textContent = 'Always included';
-        text.appendChild(meta);
-      }
-
       btn.appendChild(mark);
       btn.appendChild(text);
       li.appendChild(btn);
       el['expansion-list'].appendChild(li);
 
-      if (exp.always) return;
       btn.addEventListener('click', function () {
         btn.setAttribute('aria-pressed', btn.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
         updateDeckTotal();
@@ -170,22 +162,20 @@
     });
   }
 
+  /* The always-on expansions never appear as rows, so they are added back here
+     rather than read off the UI. */
   function chosenExpansions() {
-    var rows = el['expansion-list'].querySelectorAll('.exp-row');
     var ids = [];
-    Array.prototype.forEach.call(rows, function (r) {
-      if (r.getAttribute('aria-pressed') === 'true') ids.push(r.dataset.exp);
+    state.manifest.expansions.forEach(function (exp) {
+      if (exp.always) ids.push(exp.id);
     });
+    Array.prototype.forEach.call(
+      el['expansion-list'].querySelectorAll('.exp-row'),
+      function (r) {
+        if (r.getAttribute('aria-pressed') === 'true') ids.push(r.dataset.exp);
+      }
+    );
     return ids;
-  }
-
-  function applySelectionToUi(ids) {
-    var rows = el['expansion-list'].querySelectorAll('.exp-row');
-    Array.prototype.forEach.call(rows, function (r) {
-      var on = r.disabled || ids.indexOf(r.dataset.exp) !== -1;
-      r.setAttribute('aria-pressed', on ? 'true' : 'false');
-    });
-    updateDeckTotal();
   }
 
   function updateDeckTotal() {
@@ -429,7 +419,9 @@
     state.seen = typeof saved.seen === 'number' ? saved.seen : -1;
     state.pos = typeof saved.pos === 'number' ? saved.pos : -1;
 
-    applySelectionToUi(state.selected);
+    // The saved picks stay in state (Reshuffle rebuilds the same deck from
+    // them) but are deliberately not ticked back into the menu: a new game
+    // starts from a clean slate.
     resetCard();
 
     if (state.pos >= 0 && state.pos < state.deck.length) {
@@ -465,10 +457,7 @@
         updateDeckTotal();
 
         var saved = load();
-        if (saved && !restore(saved)) {
-          clearSaved();
-          applySelectionToUi(['base']);
-        }
+        if (saved && !restore(saved)) clearSaved();
         refreshResume();
       })
       .catch(function (err) {

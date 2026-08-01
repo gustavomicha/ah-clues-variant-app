@@ -151,6 +151,27 @@ svg {
   padding: 14px 14px 12px;
 }
 
+/* The base game heads the panel as a statement of fact, not a choice — it has
+   no checkbox because it can't be turned off. */
+.base-game {
+  text-align: center;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--rule);
+}
+.base-name {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.14rem;
+  color: var(--parchment);
+}
+.base-note {
+  display: block;
+  font-size: .82rem;
+  color: rgba(232, 220, 192, .48);
+  margin-top: 2px;
+}
+
 .panel-title {
   font-family: var(--font-display);
   font-size: .9rem;
@@ -588,12 +609,17 @@ svg {
   .controls { padding-top: 6px; padding-bottom: calc(var(--safe-b) + 8px); }
 }
 
-/* Short phones (a 640px-tall Android, or Safari with its bars showing): drop
-   the flavour line and shrink the logo so the begin button stays above the fold. */
-@media (max-height: 680px) {
-  .setup-lede { display: none; }
+/* Phone-height viewports, which is nearly all of them once Safari's bars are
+   showing. Tighten first, and only give up the flavour line on the shortest
+   screens, so the whole menu — Rules and Credits included — clears the fold. */
+@media (max-height: 745px) {
   .brand-logo { width: min(52%, 240px); }
-  .setup-scroll { gap: 12px; }
+  .setup-scroll { gap: 11px; }
+  .panel { padding: 12px 14px 11px; }
+}
+
+@media (max-height: 660px) {
+  .setup-lede { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
