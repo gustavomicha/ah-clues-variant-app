@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>Alternate Clues Variant &mdash; Arkham Horror</title>
+<meta name="description" content="Draw the Alternate Clues cards for Arkham Horror 2nd edition on your phone, no printing required.">
+<meta name="theme-color" content="#0d0f0a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="site.webmanifest">
+<link rel="icon" href="assets/img/icon.png">
+<link rel="apple-touch-icon" href="assets/img/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- ───────────────────────── setup ───────────────────────── -->
+<section id="setup" class="screen is-active">
+  <div class="setup-scroll">
+    <header class="brand">
+      <img class="brand-logo" src="assets/img/logo.webp" alt="Arkham Horror">
+      <h1 class="brand-sub">Alternate Clues Variant</h1>
+    </header>
+
+    <p class="setup-lede">
+      Whenever a Mythos card would place a Clue token, draw one of these instead.
+    </p>
+
+    <div class="panel">
+      <h2 class="panel-title">Expansions</h2>
+      <ul id="expansion-list" class="exp-list"></ul>
+      <p class="deck-total"><span id="deck-total-count">0</span> cards in the deck</p>
+    </div>
+
+    <button id="resume" class="btn btn-primary btn-block" type="button" hidden>
+      Resume &mdash; card <span id="resume-pos">1</span> of <span id="resume-total">95</span>
+    </button>
+    <button id="begin" class="btn btn-primary btn-block" type="button">Shuffle &amp; Begin</button>
+
+    <nav class="setup-links">
+      <button class="linkish" type="button" data-open="rules">Rules</button>
+      <span class="dot">&middot;</span>
+      <button class="linkish" type="button" data-open="credits">Credits</button>
+    </nav>
+  </div>
+</section>
+
+<!-- ───────────────────────── game ───────────────────────── -->
+<section id="game" class="screen">
+  <header class="topbar">
+    <button class="icon-btn" type="button" id="to-setup" aria-label="New game">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <div class="counter">
+      <span id="counter-pos">&mdash;</span><span class="counter-sep">/</span><span id="counter-total">0</span>
+    </div>
+    <button class="icon-btn" type="button" data-open="rules" aria-label="Rules">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H19v15.5H6.5A2.5 2.5 0 0 0 4 21z"/><path d="M4 18.5A2.5 2.5 0 0 1 6.5 16H19"/></svg>
+    </button>
+  </header>
+
+  <div class="stage" id="stage">
+    <div class="card-frame" id="card-frame">
+      <div class="card-flipper" id="flipper">
+        <img class="card-face card-back"  id="face-back"  src="cards/back.webp" alt="Alternate Clues card back" draggable="false">
+        <img class="card-face card-front" id="face-front" src="" alt="" draggable="false">
+      </div>
+      <button class="tap-to-draw" id="tap-to-draw" type="button">
+        <span>Tap to draw</span>
+      </button>
+    </div>
+
+    <div class="exhausted" id="exhausted" hidden>
+      <p class="exhausted-title">The deck is spent.</p>
+      <p class="exhausted-sub">All <span id="exhausted-count">0</span> cards have been drawn.</p>
+      <button class="btn btn-primary" type="button" id="reshuffle">Reshuffle the deck</button>
+    </div>
+  </div>
+
+  <footer class="controls">
+    <button class="btn btn-nav" id="prev" type="button">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+      <span>Back</span>
+    </button>
+    <button class="btn btn-nav btn-nav-primary" id="next" type="button">
+      <span>Draw</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+    </button>
+  </footer>
+</section>
+
+<!-- ───────────────────────── rules ───────────────────────── -->
+<section id="rules" class="screen sheet">
+  <header class="sheet-bar">
+    <h2>Rules of the Variant</h2>
+    <button class="icon-btn" type="button" data-close aria-label="Close">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </header>
+  <div class="sheet-body">
+    <p>Whenever you draw a Mythos card during the Mythos Phase, look at its <em>Clue Appears At:</em> entry. For each Clue that Mythos card would place on the board &mdash; whether or not there is a gate at those locations &mdash; instead draw one Alternate Clues card and follow the instructions on it.</p>
+    <p>If an Alternate Clues card would place something in a location with a gate, it does nothing. A Mythos card that places no Clues doesn't warrant a card being drawn, and one that places several Clue tokens warrants that many cards drawn. A gate opening in a location that contains Alternate Clues objects discards all those objects just as it would discard Clue tokens.</p>
+    <p>Alternate Clues cards don't just add Clue tokens: they add items, money, special conditions and more. Random Common and Unique Items, Spells, Skills and Allies are placed at the location face down, and are turned face up only when picked up. For the most part they follow the base game's rules for picking up Clue tokens: you pick up any and all objects at a location if and only if you end your movement there, and you must pick up everything you can.</p>
+
+    <h3>Specific cases</h3>
+    <dl class="rules-dl">
+      <dt>Sanity and Stamina</dt>
+      <dd>Place the tokens in the location. An investigator picking them up gains that much Sanity or Stamina. You only pick up enough to heal to full, and leave the rest behind.</dd>
+
+      <dt>Special cards (Bank Loan, Rail Pass, etc.)</dt>
+      <dd>An investigator can only pick up a special card &mdash; one there are only eight copies of &mdash; if they don't already have one. It stays in the location, waiting for someone else. If the supply has run out, the card does nothing and you don't draw a replacement.</dd>
+
+      <dt>Specific cards</dt>
+      <dd>Search the correct deck for the named card and place it at the location. If there are none left in the deck, ignore the Alternate Clues card and don't draw a replacement.</dd>
+
+      <dt>Gate and monster trophies</dt>
+      <dd>Place these trophies in the location upside down, to tell them apart from real gates and monsters.</dd>
+
+      <dt>Inner Sanctum</dt>
+      <dd>You pick up items at the Inner Sanctum by ending your movement in the Silver Twilight Lodge while holding a Silver Twilight Membership. Keep the Lodge's and the Sanctum's objects clearly separate. A gate opening at the Lodge discards the Sanctum's items too.</dd>
+
+      <dt>Streets, Other Worlds, Lost in Time and Space, Jail Cells</dt>
+      <dd>The same rules apply: you pick up objects by ending your movement there. In an Other World you only end your movement in the second area if you stay &mdash; someone who ports out with Find Gate doesn't gain the Clue token.</dd>
+
+      <dt>Bank Loan</dt>
+      <dd>An investigator who has previously defaulted on a Bank Loan can't pick one up.</dd>
+
+      <dt>Blessing</dt>
+      <dd>Picking up a Blessing works exactly like being Blessed: it either Blesses you or removes a current Curse.</dd>
+
+      <dt>Captain of the White Ship</dt>
+      <dd>Follow the card. If someone is already the Captain, ignore it and don't draw a replacement. You must remove the card from the location even if you don't use the White Ship ability that turn &mdash; the offer only stands once.</dd>
+
+      <dt>Changed</dt>
+      <dd>Follow the card. If someone is already Changed, ignore it and don't draw a replacement.</dd>
+
+      <dt>Charter token</dt>
+      <dd>Follow the card. A spare aquatic location marker, or any other makeshift solution, works if you'd rather not use the token.</dd>
+
+      <dt>Dunwich Horror token</dt>
+      <dd>Follow the card. You can only place one if the Dunwich Horror isn't on the board, and if a game effect needs a token while the only one left is at a location, it is taken from there &mdash; there's no slowing Wilbur's brother.</dd>
+
+      <dt>Innsmouth Look</dt>
+      <dd>Follow the card. If you hold a "You don't have the Innsmouth Look" card, everyone else is slightly more at risk of that foul ancestry. If you bear the Look, maybe get out of Innsmouth.</dd>
+
+      <dt>Rift Progress token</dt>
+      <dd>Follow the card. If a game effect needs a token while the only one left is at a location, it is taken from there.</dd>
+
+      <dt>Uprising Clue token</dt>
+      <dd>Follow the card. A Clue token with a Sanity token on top, or any other makeshift solution, works instead.</dd>
+    </dl>
+
+    <a class="btn btn-ghost btn-block" href="https://boardgamegeek.com/thread/1835036/alternate-clues-variant-stable-locations-here-we-c" target="_blank" rel="noopener">
+      Read the original thread on BGG
+    </a>
+  </div>
+</section>
+
+<!-- ───────────────────────── credits ───────────────────────── -->
+<section id="credits" class="screen sheet">
+  <header class="sheet-bar">
+    <h2>Credits</h2>
+    <button class="icon-btn" type="button" data-close aria-label="Close">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </header>
+  <div class="sheet-body">
+    <div class="credit">
+      <p class="credit-role">The variant and every card in it</p>
+      <p class="credit-name">Ville-Veikko Jylh&auml;m&auml;ki</p>
+      <p class="credit-meta">
+        <a href="https://boardgamegeek.com/thread/1835036/alternate-clues-variant-stable-locations-here-we-c" target="_blank" rel="noopener">@Cancelion on BoardGameGeek</a>
+      </p>
+    </div>
+
+    <div class="credit">
+      <p class="credit-role">The expansion symbols on the cards</p>
+      <p class="credit-name">Eduardo Hellas</p>
+      <p class="credit-meta">@ehellas on BoardGameGeek</p>
+    </div>
+
+    <p class="credit-note">
+      This app only shuffles and shows the cards so you don't have to print them.
+      Arkham Horror is a trademark of Fantasy Flight Games; the artwork here belongs
+      to its respective owners and is used by fans, for fans.
+    </p>
+  </div>
+</section>
+
+<script src="assets/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "Alternate Clues Variant",
+  "short_name": "Alt Clues",
+  "description": "Draw the Alternate Clues cards for Arkham Horror 2nd edition on your phone, no printing required.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0d0f0a",
+  "theme_color": "#0d0f0a",
+  "icons": [
+    {
+      "src": "assets/img/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

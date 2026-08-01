@@ -1,0 +1,11 @@
+# Python tooling — only needed to regenerate cards/, never to run the app
+.venv/
+__pycache__/
+out/
+
+# The print-and-play PDF the cards were cut from. It is Cancelion's file,
+# not ours to redistribute; extractor/README.md says how to use your own copy.
+extractor/*.pdf
+
+# macOS
+.DS_Store
